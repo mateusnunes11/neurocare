@@ -7,11 +7,14 @@
 </head>
 
 <body>
-    <div style="text-align: right; margin-bottom: 10px;">
-        <a href="{% url 'logout' %}">Sair</a>
-    </div>
+
+    {% if user.is_authenticated %}
+    <p>Usuário logado: <strong>{{ user.username }}</strong></p>
+    <a href="{% url 'logout' %}"><button type="button">Trocar usuário</button></a>
+    {% endif %}
 
     <h1>Questionário SRQ-20</h1>
+
     <form method="post">
         {% csrf_token %}
         {% for question in questions %}
@@ -19,8 +22,10 @@
         <label><input type="radio" name="q{{ forloop.counter }}" value="sim" required> Sim</label>
         <label><input type="radio" name="q{{ forloop.counter }}" value="nao"> Não</label>
         {% endfor %}
+        <br>
         <button type="submit">Enviar</button>
     </form>
+
 </body>
 
 </html>

@@ -26,7 +26,6 @@ questions = [
     "Você tem ouvido vozes sem saber de onde vêm ou visto coisas que outras pessoas não vêem?"
 ]
 
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -50,9 +49,9 @@ def register_view(request):
         if User.objects.filter(username=username).exists():
             return render(request, 'register.html', {'erro': 'Usuário já existe'})
 
-        user = User.objects.create_user(username=username, password=password, age=age, gender=gender)
-        login(request, user)
-        return redirect('questionario')
+        User.objects.create_user(username=username, password=password, age=age, gender=gender)
+        return redirect('login')  
+
     return render(request, 'register.html')
 
 
@@ -61,7 +60,7 @@ def logout_view(request):
     return redirect('login')
 
 
-@login_required
+@login_required(login_url='/login/')
 def questionnaire_view(request):
     if request.method == 'POST':
         user = request.user
@@ -95,6 +94,13 @@ def questionnaire_view(request):
         questionnaire.suffering_level = nivel
         questionnaire.save()
 
-        return render(request, 'resultado.html', {'score': total_score, 'nivel': nivel})
+        return render(request, 'resultado.html', {
+            'score': total_score,
+            'nivel': nivel,
+            'username': user.username
+        })
 
-    return render(request, 'questionnaire.html', {'questions': questions})
+    return render(request, 'questionnaire.html', {
+        'questions': questions,
+        'username': request.user.username
+    })
