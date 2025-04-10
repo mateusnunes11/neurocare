@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Questionário SRQ-20</title>
+</head>
+
+<body>
+    <div style="text-align: right; margin-bottom: 10px;">
+        <a href="{% url 'logout' %}">Sair</a>
+    </div>
+
+    <h1>Questionário SRQ-20</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for question in questions %}
+        <p>{{ forloop.counter }}. {{ question }}</p>
+        <label><input type="radio" name="q{{ forloop.counter }}" value="sim" required> Sim</label>
+        <label><input type="radio" name="q{{ forloop.counter }}" value="nao"> Não</label>
+        {% endfor %}
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+
+</html>
