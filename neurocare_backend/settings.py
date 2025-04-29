@@ -27,8 +27,7 @@ SECRET_KEY = 'django-insecure-tmosj595q-p7f=iem4930@1^do0#@n!7l$)ie&&l^3pkmrzzb5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['mateusnunes11.pythonanywhere.com']
 
 # Application definition
 
@@ -85,8 +84,12 @@ WSGI_APPLICATION = 'neurocare_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Mateusnunes11$NeuroCareDB',
+        'USER': 'Mateusnunes11',
+        'PASSWORD': 'mateusmat',
+        'HOST': 'seuusername.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
 
