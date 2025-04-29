@@ -160,6 +160,5 @@ def dashboard_view(request):
     'graves': graves or 0,
 }
 
-
     return render(request, 'dashboard.html', context)
 

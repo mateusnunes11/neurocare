@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'Mateusnunes11$NeuroCareDB',
         'USER': 'Mateusnunes11',
         'PASSWORD': 'mateusmat',
-        'HOST': 'seuusername.mysql.pythonanywhere-services.com',
+        'HOST': 'mateusnunes11.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
 }
