@@ -1,31 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+{% load static %}
 
 <head>
     <meta charset="UTF-8">
     <title>Questionário SRQ-20</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 
-    {% if user.is_authenticated %}
-    <p>Usuário logado: <strong>{{ user.username }}</strong></p>
-    <a href="{% url 'logout' %}"><button type="button">Trocar usuário</button></a>
-    {% endif %}
+    <div class="container">
+        <h1>Questionário SRQ-20</h1>
 
-    <h1>Questionário SRQ-20</h1>
+        <div class="token-container">
+            <p><strong>Seu token de acesso:</strong></p>
+            <div class="token-box">
+                <span id="user-token">{{ token }}</span>
+                <button onclick="copyToken()">Copiar</button>
+            </div>
+        </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {% for question in questions %}
-        <p>{{ forloop.counter }}. {{ question }}</p>
-        <label><input type="radio" name="q{{ forloop.counter }}" value="sim" required> Sim</label>
-        <label><input type="radio" name="q{{ forloop.counter }}" value="nao"> Não</label>
-        {% endfor %}
-        <br>
-        <button type="submit">Enviar</button>
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            {% for question in questions %}
+            <div class="question-block">
+                <p>{{ forloop.counter }}. {{ question }}</p>
+                <div class="radio-group">
+                    <label><input type="radio" name="q{{ forloop.counter }}" value="sim" required> Sim</label>
+                    <label><input type="radio" name="q{{ forloop.counter }}" value="nao"> Não</label>
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit">Enviar</button>
+        </form>
+
+        <p><a href="{% url 'logout' %}">Trocar Usuário</a></p>
+    </div>
 
 </body>
+
+<script>
+    function copyToken() {
+        var tokenText = document.getElementById("user-token").innerText;
+        navigator.clipboard.writeText(tokenText).then(function () {
+            alert("Token copiado para a área de transferência!");
+        }, function (err) {
+            alert("Erro ao copiar token: " + err);
+        });
+    }
+</script>
 
 </html>

@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container" id="conteudoDashboard">
+        <h1>Dashboard</h1>
+
+        <h2>Métricas Individuais</h2>
+        <p><strong>Total de Questionários Respondidos:</strong> {{ total_questionarios_user }}</p>
+        <p><strong>Média de respostas "Sim":</strong> {{ media_individual }}%</p>
+
+        <h2>Métricas Gerais</h2>
+        <p><strong>Total de Questionários no Sistema:</strong> {{ total_questionarios_geral }}</p>
+        <p><strong>Média Geral de respostas "Sim":</strong> {{ media_geral }}%</p>
+        <p><strong>Percentual de usuários com sofrimento mental:</strong> {{ percentual_transtorno }}%</p>
+
+        <div class="actions">
+            <button onclick="baixarPDF()">Exportar em PDF</button>
+            <button onclick="baixarCSV()">Exportar em CSV</button>
+            <a href="{% url 'questionnaire' %}" class="btn">Responder novo questionário</a>
+            <a href="{% url 'logout' %}" class="btn">Trocar usuário</a>
+        </div>
+
+        <h2>Gráficos</h2>
+        <canvas id="barras" width="400" height="200"></canvas>
+        <canvas id="pizza" width="400" height="200"></canvas>
+    </div>
+
+    <script>
+        const barras = document.getElementById('barras').getContext('2d');
+        new Chart(barras, {
+            type: 'bar',
+            data: {
+                labels: ['Leve', 'Moderado', 'Grave'],
+                datasets: [{
+                    label: 'Usuários por nível de sofrimento',
+                    data: [
+                        {{ leves }},
+                {{ moderados }},
+                        {{ graves }}
+                    ],
+            backgroundColor: ['#4CAF50', '#FF9800', '#F44336']
+                }]
+            },
+            options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Distribuição de Níveis de Sofrimento' }
+            }
+        }
+        });
+
+        const pizza = document.getElementById('pizza').getContext('2d');
+
+        new Chart(pizza, {
+            type: 'pie',
+            data: {
+                labels: ['Com sofrimento', 'Sem sofrimento'],
+                datasets: [{
+                    data: [
+                        {{ usuarios_transtorno }},
+                {{ sem_transtorno }}
+                    ],
+            backgroundColor: ['#FF5722', '#8BC34A']
+        }]
+            },
+            options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Percentual de Transtorno Mental' }
+            }
+        }
+        });
+    </script>
+
+    <script>
+        function baixarPDF() {
+            const elemento = document.getElementById('conteudoDashboard');
+            const opt = {
+                margin: 0.5,
+                filename: 'dashboard.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(elemento).set(opt).save();
+        }
+
+        function baixarCSV() {
+            const linhas = [
+                ["Métrica", "Valor"],
+                ["Total de Questionários Respondidos", "{{ total_questionarios_user }}"],
+                ["Média de respostas Sim (Indiv.)", "{{ media_individual }}%"],
+                ["Total de Questionários no Sistema", "{{ total_questionarios_geral }}"],
+                ["Média Geral de respostas Sim", "{{ media_geral }}%"],
+                ["Percentual com sofrimento mental", "{{ percentual_transtorno }}%"]
+            ];
+
+            let csv = '';
+            linhas.forEach(linha => {
+                csv += linha.join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", "relatorio.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+
+</body>
+
+</html>

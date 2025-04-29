@@ -1,41 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <title>Cadastro</title>
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 </head>
 
 <body>
-    <h1>Criar Conta</h1>
+    <div class="container">
+        <h1>Cadastro</h1>
 
-    {% if erro %}
-    <p style="color:red;">{{ erro }}</p>
-    {% endif %}
+        {% if erro %}
+        <p class="error">{{ erro }}</p>
+        {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        <label>Usuário:</label><br>
-        <input type="text" name="username" required><br><br>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Usuário" required>
+            <input type="password" name="password" placeholder="Senha" required>
+            <input type="number" name="age" placeholder="Idade" required>
+            <select name="gender" required>
+                <option value="">Selecione o gênero</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+            </select>
+            <button type="submit">Cadastrar</button>
+        </form>
 
-        <label>Senha:</label><br>
-        <input type="password" name="password" required><br><br>
-
-        <label>Idade:</label><br>
-        <input type="number" name="age" required><br><br>
-
-        <label>Gênero:</label><br>
-        <select name="gender" required>
-            <option value="">Selecione</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Feminino">Feminino</option>
-            <option value="Outro">Outro</option>
-        </select><br><br>
-
-        <button type="submit">Cadastrar</button>
-    </form>
-
-    <p>Já tem conta? <a href="{% url 'login' %}">Faça login</a></p>
+        <p>Já tem conta? <a href="{% url 'login' %}">Faça login</a></p>
+    </div>
 </body>
 
 </html>

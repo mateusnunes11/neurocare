@@ -1,9 +1,11 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+import uuid
 
 class User(AbstractUser):
+    age = models.PositiveIntegerField(null=True, blank=True)
     gender = models.CharField(max_length=10, null=True, blank=True)
-    age = models.IntegerField(null=True, blank=True)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     registration_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

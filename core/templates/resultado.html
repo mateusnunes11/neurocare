@@ -1,21 +1,38 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
-    <title>Resultado - SRQ-20</title>
+    <title>Resultado do Questionário</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
-    <h1>Resultado do Questionário SRQ-20</h1>
 
-    <p><strong>Usuário:</strong> {{ username }}</p>
-    <p><strong>Pontuação obtida:</strong> {{ score }} de 20</p>
-    <p><strong>Classificação:</strong> {{ nivel }}</p>
+    <div class="container">
+        <h1>Resultado do Questionário</h1>
 
-    <br>
-    <a href="{% url 'questionario' %}"><button>Refazer Questionário</button></a>
-    <a href="{% url 'logout' %}"><button>Sair</button></a>
+        <p><strong>Pontuação total:</strong> {{ score }}/20</p>
+        <p><strong>Classificação:</strong> {{ nivel }}</p>
+
+        <br>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+            <a href="{% url 'questionnaire' %}">
+                <button>Responder Novamente</button>
+            </a>
+
+            <a href="{% url 'dashboard' %}">
+                <button>Visualizar Relatórios</button>
+            </a>
+
+            <a href="{% url 'logout' %}">
+                <button style="background-color: #f44336;">Trocar Usuário</button>
+            </a>
+        </div>
+    </div>
+
 </body>
 
 </html>
