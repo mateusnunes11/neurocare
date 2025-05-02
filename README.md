@@ -9,3 +9,5 @@ Django 5.2
 MySQL (ou SQLite para testes)
 
 HTML/CSS (templates Django)
+
+https://mateusnunes11.pythonanywhere.com/
